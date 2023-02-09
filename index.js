@@ -1,75 +1,86 @@
-alert(
-  "Ingrese numeros de producto que quiere comprar y para finalizar o salir presione 0"
+const productos = [
+  { nombre: "Pan masa madre", precio: "100" },
+  { nombre: "Budin masa madre", precio: "200" },
+  { nombre: "Alfajor integral", precio: "300" },
+  { nombre: "Mermelada natural", precio: "400" },
+];
+
+let carrito = [];
+
+let seleccion = parseInt(
+  prompt(`Hola, desea comprar algun producto?\n Si = 1\n No = 0 `)
 );
 
-let seleccionarProductos = parseInt(
-  prompt(
-    "1)Pan masa madre $100 2)Budin masa madre $200 3)Alfajor integral $300 4)Mermelada natural $400 0)Para finalizar "
-  )
-);
-let seleccionarCantidad;
-let total = 0;
-
-const cantidad = (cant, precio) => {
-  return cant * precio;
-};
-
-while (seleccionarProductos != 0) {
-  switch (seleccionarProductos) {
-    case 1:
-      seleccionarCantidad = parseInt(
-        prompt(
-          "El producto que seleccionaste es Pan masa madre, indique cantidad"
-        )
-      );
-      total = total + cantidad(seleccionarCantidad, 100);
-      break;
-    case 2:
-      seleccionarCantidad = parseInt(
-        prompt(
-          "El producto que seleccionaste es Budin masa madre, indique cantidad"
-        )
-      );
-      total = total + cantidad(seleccionarCantidad, 200);
-      break;
-    case 3:
-      seleccionarCantidad = parseInt(
-        prompt(
-          "El producto que seleccionaste es Alfajor integral, indique cantidad"
-        )
-      );
-      total = total + cantidad(seleccionarCantidad, 300);
-      break;
-    case 4:
-      seleccionarCantidad = parseInt(
-        prompt(
-          "El producto que seleccionaste es Mermelada natural, indique cantidad"
-        )
-      );
-      total = total + cantidad(seleccionarCantidad, 400);
-      break;
-    default:
-      alert("La opcion ingresada no es correcta");
-      break;
-  }
-  seleccionarProductos = parseInt(
-    prompt(
-      "1)Pan masa madre $100 2)Budin masa madre $200 3)Alfajor integral $300 4)Mermelada natural $400 0)Para finalizar "
-    )
+while (seleccion != 1 && seleccion != 0) {
+  alert("Por favor, ingrese:\n 1 = Si\n 0 = No");
+  deseaComprarAlgo();
+}
+if (seleccion === 1) {
+  alert(
+    "A continucacion nuestra lista de productos:\n\n-Seleccione el producto con su numero indicado y agregalo al carrito."
   );
+} else if (seleccion === 0) {
+  alert("gracias por visitarnos, hasta pronto");
 }
 
-alert("el total de la compra es de " + total);
-
-const envio = () => {
-  if (total >= 5000) {
-    alert("Al ser una compra mayor a $5000 el envio es gratuito");
+while (seleccion != 0) {
+  let precio = 0;
+  let nuestrosProductos = productos.map(
+    (producto, index) =>
+      index + 1 + "-  " + producto.nombre + " " + " $" + producto.precio
+  );
+  let opcionesDeProductoPorSeleccionar = parseInt(
+    prompt(nuestrosProductos.join("\n"))
+  );
+  if (
+    opcionesDeProductoPorSeleccionar == 1 ||
+    opcionesDeProductoPorSeleccionar == 2 ||
+    opcionesDeProductoPorSeleccionar == 3 ||
+    opcionesDeProductoPorSeleccionar == 4
+  ) {
+    switch (opcionesDeProductoPorSeleccionar) {
+      case 1:
+        nombre = "Pan masa madre";
+        precio = 100;
+        break;
+      case 2:
+        nombre = "Budin masa madre";
+        precio = 200;
+        break;
+      case 3:
+        nombre = "Alfajor integral";
+        precio = 300;
+        break;
+      case 4:
+        nombre = "Mermelada natural";
+        precio = 400;
+        break;
+      default:
+        break;
+    }
+    let unidades = parseInt(prompt("¿cuantas unidades quiere llevar?"));
+    carrito.push({ nombre, unidades, precio });
   } else {
-    total = total + 500;
-    alert("El costo de envio es de $500, el costo total es " + total);
+    alert("no tenemos ese producto");
   }
-};
+  deseaComprarAlgo();
+  while (seleccion === 0) {
+    let mensaje = `Gracias por confiar en nosotros. Tu carrito es el siguiente:\n\n`;
+    carrito.map((carritoFinal) => {
+      mensaje += ` -Producto: ${carritoFinal.nombre}, Unidades: ${
+        carritoFinal.unidades
+      }, Total a pagar por producto $${
+        carritoFinal.unidades * carritoFinal.precio
+      }\n`;
+    });
+    alert(mensaje);
+    break;
+  }
+}
 
-envio();
+const total = carrito.reduce((acc, el) => acc + el.precio * el.unidades, 0);
+alert(`El total a pagar es: $${total}`);
 
-alert("Su compra ha finalizado");
+function deseaComprarAlgo() {
+  seleccion = parseInt(prompt("Desea seguir comprando??\n 1 = Si\n 0 = No"));
+}
